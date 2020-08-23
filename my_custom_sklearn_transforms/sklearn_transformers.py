@@ -25,3 +25,11 @@ class RecalculateNullGrades():
         notas = notas.T.fillna(notas.mean(axis=1)).T
         data.loc[:,'NOTA_DE':'NOTA_GO'] = notas
         return data
+
+class RemoveNull():
+    def fit (self, X, y=None):
+        return self
+
+    def transform(self, X, y):
+        bool_index = X.isnull().any(axis=1)
+        return X.drop(X[bool_index].index), y.drop(y[bool_index].index)
