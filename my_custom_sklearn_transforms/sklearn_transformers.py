@@ -14,3 +14,14 @@ class DropColumns(BaseEstimator, TransformerMixin):
         data = X.copy()
         # Retornamos um novo dataframe sem as colunas indesejadas
         return data.drop(labels=self.columns, axis='columns')
+
+class RecalculateNullGrades():    
+    def fit(self, X, y=None):
+        return self
+    # Retorna um novo dataframe com valor nulo igual a média das demais notas do aluno  
+    def transform(self, X):
+        data = X.copy()
+        notas = data.loc[:,'NOTA_DE':'NOTA_GO']
+        notas = notas.T.fillna(notas.mean(axis=1)).T
+        data.loc[:,'NOTA_DE':'NOTA_GO'] = notas
+        return data
